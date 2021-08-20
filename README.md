@@ -20,3 +20,8 @@
 
 [相关数据](https://pan.baidu.com/s/15Q_w2AbwMBnLPX6AaywOKg) 提取码: cyn6
 
+## Reference
+
+Gómez-Expósito, A., Conejo, A. J., & Cañizares, C. (Eds.). (2018). Electric energy systems: analysis and operation. CRC press.
+
+
