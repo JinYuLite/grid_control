@@ -1,5 +1,8 @@
+
 # Grid Control
 > "国家电网调控AI创新大赛：电网运行组织智能安排"比赛相关资料，包括文档、代码和数据等。
+
+
 
 ## 文件说明
 
@@ -8,6 +11,23 @@
     - docs: 关于环境、策略的说明文档
     - src: 源代码
 ```
+
+## 环境安装
+
+首先安装虚拟环境，并安装和线上环境相同的依赖        
+```bash
+    conda create -n grid_control python=3.6.9
+    conda activate grid_control
+    pip install -r requirements.txt
+```
+
+然后可以执行一个dummy agent来验证环境安装成功
+```bash
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:src/lib64   # 添加动态库依赖
+    cd src
+    python main.py
+```
+
 
 
 ## 参考资料
