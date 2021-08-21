@@ -1,0 +1,76 @@
+# 线路连续max_steps_soft_overflow个时间步rho>soft_overflow_bound,线路断开，rho>hard_overflow_bound立刻断开
+soft_overflow_bound: 1
+max_steps_soft_overflow: 4
+hard_overflow_bound: 1.35
+
+# 随机故障发生概率
+prob_disconnection: 0.01
+
+# 平衡机功率容忍度
+min_balanced_gen_bound: 0.9
+max_balanced_gen_bound: 1.1
+
+# 线路断开持续时间步数
+max_steps_to_reconnect_line: 16
+
+# 机组爬坡率
+ramp_rate: 0.05
+
+# 奖励值中各因素系数
+coeff_line_over_flow: 1
+coeff_renewable_consumption: 2
+coeff_running_cost: 1
+coeff_balanced_gen: 3
+coeff_gen_reactive_power: 1
+coeff_sub_voltage: 1
+
+# 机组关闭后，无法运行的连续时间步数
+max_steps_to_recover_gen: 40
+# 机组开机后，无法关机的连续时间步数
+max_steps_to_close_gen: 40
+
+#机组费用计算
+second_order_cost: [0.069663, 0.069663, 0.069663, 0.010875, 0.010875, 0.069663, 0.0128,
+    0.069663, 0.069663, 0.010875, 0.003, 0.069663, 0.069663, 0.0128, 0.069663, 0.0128,
+    0.069663, 0.069663, 0.0128, 0.002401, 0.002401, 0.0128, 0.0128, 0.0044, 0.0044,
+    0.0128, 0.01059, 0.01059, 0.010875, 0.045923, 0.069663, 0.069663, 0.028302, 0.0128,
+    0.0128, 0.010875, 0.0128, 0.069663, 0.003, 0.010875, 0.028302, 0.009774, 0.010875,
+    0.010875, 0.010875, 0.028302, 0.0128, 0.0128, 0.028302, 0.009774, 0.0128, 0.0128,
+    0.0128, 0.009774]
+first_order_cost: [26.2438, 26.2438, 26.2438, 12.8875, 12.8875, 26.2438, 17.82, 26.2438,
+    26.2438, 12.8875, 10.76, 26.2438, 26.2438, 17.82, 26.2438, 17.82, 26.2438, 26.2438,
+    17.82, 12.3299, 12.3299, 17.82, 17.82, 13.29, 13.29, 17.82, 8.3391, 8.3391, 12.8875,
+    15.4708, 26.2438, 26.2438, 37.6968, 17.82, 17.82, 12.8875, 17.82, 26.2438, 10.76,
+    12.8875, 37.6968, 22.9423, 12.8875, 12.8875, 12.8875, 37.6968, 17.82, 17.82, 37.6968,
+    22.9423, 17.82, 17.82, 17.82, 22.9423]
+constant_cost: [31.67, 31.67, 31.67, 6.78, 6.78, 31.67, 10.15, 31.67, 31.67, 6.78,
+    32.96, 31.67, 31.67, 10.15, 31.67, 10.15, 31.67, 31.67, 10.15, 28, 28, 10.15,
+    10.15, 39, 39, 10.15, 64.16, 64.16, 6.78, 74.33, 31.67, 31.67, 17.95, 10.15, 10.15,
+    6.78, 10.15, 31.67, 32.96, 6.78, 17.95, 58.81, 6.78, 6.78, 6.78, 17.95, 10.15,
+    10.15, 17.95, 58.81, 10.15, 10.15, 10.15, 58.81]
+startup_cost: [80, 80, 80, 880, 220, 80, 100, 80, 80, 200, 200, 80, 80, 100, 80,
+    100, 80, 80, 118, 200, 200, 100, 100, 200, 200, 100, 500, 500, 200, 90, 80, 80,
+    60, 100, 100, 880, 100, 80, 880, 800, 60, 90, 200, 200, 220, 60, 100, 100, 60,
+    90, 100, 100, 100, 90]
+gen_name_list: [bus.119.gen, bus.4.gen, bus.6.gen, bus.8.gen, bus.10.gen, bus.12.gen,
+    bus.15.gen, bus.18.gen, bus.19.gen, bus.24.gen, bus.25.gen, bus.26.gen, bus.120.gen,
+    bus.31.gen, bus.32.gen, bus.34.gen, bus.36.gen, bus.40.gen, bus.42.gen, bus.46.gen,
+    bus.49.gen, bus.121.gen, bus.55.gen, bus.56.gen, bus.122.gen, bus.61.gen, bus.62.gen,
+    bus.65.gen, bus.66.gen, bus.69.gen, bus.70.gen, bus.72.gen, bus.73.gen, bus.74.gen,
+    bus.76.gen, bus.77.gen, bus.80.gen, bus.85.gen, bus.87.gen, bus.89.gen, bus.90.gen,
+    bus.91.gen, bus.92.gen, bus.99.gen, bus.100.gen, bus.103.gen, bus.104.gen, bus.105.gen,
+    bus.123.gen, bus.110.gen, bus.111.gen, bus.124.gen, bus.113.gen, bus.116.gen]
+
+#随机断线白名单
+white_list_random_disconnection: ["branch43", "branch44","branch113", "branch114", "branch115",
+                      "branch118", "branch66", "branch75", "branch85", "branch98", "branch123",
+                                  "branch138", "branch141"]
+
+# 对grid返回的gen_p进行保留的小数位
+keep_decimal_digits: 2
+
+# 允许C++模块对(火力/新能源)机组出力调整的精度误差
+env_allow_precision: 0.1
+
+# 合法动作允许精度误差
+action_allow_precision: 0.00001
