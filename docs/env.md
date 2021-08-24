@@ -13,14 +13,9 @@
   * max_renewable_gen_p_all: 106820 * 18
   * load_p_all: 106820 * 91
 * reward_type: 'EPRIReward'
-* done: 记录episode是否结束
-* action_space_cls
 * gen_status/steps_to_recorver_gen/steps_to_close_gen: `dim=(54)`，记录发电机状态，由`_update_gen_status`函数更新
 * steps_to_reconnect_line/count_soft_overflow_steps: `dim=(185,)`，记录电线状态 
-* sample_idx: 一个随机数 79481，
-* last_injection_gen_p: `dim=(54)`，本时刻发电机注入的数值，从表格读入
-* nextstep_load_p: dim=(91)，下一时刻load
-* curstep_renewable_gen_p_max/nextstep_renewable_gen_p_max: dim=(18)，本时刻和下一时刻新能源发电
+* sample_idx: 一个随机数，代表起始的时刻
 * step()
   * 计算`injection_gen_p`和`injection_gen_v`：根据`act`和`last_obs`
   * 随机切断线路，影响电网的结构
@@ -94,6 +89,7 @@
 
 
 ### QAs:
+
 1. 潮流前，潮流后什么意思
 
 2. grid_loss 是怎么计算的，每一步只有一个值？
