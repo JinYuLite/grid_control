@@ -20,8 +20,8 @@
   * 计算`injection_gen_p`和`injection_gen_v`：根据`act`和`last_obs`
   * 随机切断线路，影响电网的结构
   * 运行Power Flow，更新`grid`状态，其中
-  * gen_p/gen_q/gen_v 由第一步计算决定
-  * load_p/load_q/load_v/renewable_gen 根据t从表格读取
+  * `gen_p`/`gen_q`/`gen_v` 由第一步计算决定
+  * `load_p`/`load_q`/`load_v`/`renewable_gen` 根据t从表格读取
 
 ### Reward
 
