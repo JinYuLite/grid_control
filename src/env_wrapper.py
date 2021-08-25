@@ -68,6 +68,8 @@ class GridEnv(gym.Env):
         return masked_act
 
 
+# M: Notice the normalize function in Baselines. We should carefully set low and high value
+# https://github.com/hill-a/stable-baselines/blob/master/stable_baselines/common/input.py
 def vectorize(obs):
     """
         Convert real obs to gym-like obs
