@@ -2,31 +2,26 @@
 
 # Environment Description
 
-每个节点上面可以连接若干发电(机组)和用电(负荷)设备，节点之间由线路连接。
+每个节点上面可以连接若干发电(机组)和用电(负荷)设备，节点之间由线路连接。           
 机组(发电) 54 / 新能源机组 18 / 负荷(用电) 91 / 线路(支路) 185 / 节点 126
 
 
 ### Environment     
 
-    * settings
-    * forecast_reader: ForecastReader从表格读取`load_p`和`max_renewable_gen_p`，可能是下一时刻的值，为了让问题更简单？
-        * max_renewable_gen_p_all: 106820 * 18
-        * load_p_all: 106820 * 91
-    * reward_type: 'EPRIReward'
-    * done: 记录episode是否结束
-    * action_space_cls
-    * gen_status/steps_to_recorver_gen/steps_to_close_gen: `dim=(54)`，记录发电机状态，由`_update_gen_status`函数更新
-    * steps_to_reconnect_line/count_soft_overflow_steps: `dim=(185,)`，记录电线状态 
-    * sample_idx: 一个随机数 79481，
-    * last_injection_gen_p: `dim=(54)`，本时刻发电机注入的数值，从表格读入
-    * nextstep_load_p: dim=(91)，下一时刻load
-    * curstep_renewable_gen_p_max/nextstep_renewable_gen_p_max: dim=(18)，本时刻和下一时刻新能源发电
-    * step()
-        * 计算`injection_gen_p`和`injection_gen_v`：根据`act`和`last_obs`
-        * 随机切断线路，影响电网的结构
-        * 运行Power Flow，更新`grid`状态，其中
-        * gen_p/gen_q/gen_v 由第一步计算决定
-        * load_p/load_q/load_v/renewable_gen 根据t从表格读取
+* settings
+* forecast_reader: ForecastReader从表格读取`load_p`和`max_renewable_gen_p`，可能是下一时刻的值，为了让问题更简单？
+  * max_renewable_gen_p_all: 106820 * 18
+  * load_p_all: 106820 * 91
+* reward_type: 'EPRIReward'
+* gen_status/steps_to_recorver_gen/steps_to_close_gen: `dim=(54)`，记录发电机状态，由`_update_gen_status`函数更新
+* steps_to_reconnect_line/count_soft_overflow_steps: `dim=(185,)`，记录电线状态 
+* sample_idx: 一个随机数，代表起始的时刻
+* step()
+  * 计算`injection_gen_p`和`injection_gen_v`：根据`act`和`last_obs`
+  * 随机切断线路，影响电网的结构
+  * 运行Power Flow，更新`grid`状态，其中
+  * `gen_p`/`gen_q`/`gen_v` 由第一步计算决定
+  * `load_p`/`load_q`/`load_v`/`renewable_gen` 根据t从表格读取
 
 ### Reward
 
@@ -94,6 +89,7 @@
 
 
 ### QAs:
+
 1. 潮流前，潮流后什么意思
 
 2. grid_loss 是怎么计算的，每一步只有一个值？
