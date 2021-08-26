@@ -21,7 +21,7 @@ class GridEnv(gym.Env):
         tmp_obs = self.env.reset()
         tmp_observation = vectorize(tmp_obs)
         OBSERVATION_DIM = tmp_observation.shape[0]
-        self.action_space = gym.spaces.Box(low=np.finfo(np.float32).min, high=np.finfo(np.float32).max, shape=(OBSERVATION_DIM,), dtype=np.float32) 
+        self.observation_space = gym.spaces.Box(low=np.finfo(np.float32).min, high=np.finfo(np.float32).max, shape=(OBSERVATION_DIM,), dtype=np.float32) 
 
         print("Action Dim: {}\nObservation Dim :{}".format(ACTION_DIM, OBSERVATION_DIM))
 
