@@ -73,7 +73,7 @@ if __name__ == "__main__":
         gradient_steps=10
     )
 
-    model.learn(total_timesteps=2000000, log_interval=10)
+    model.learn(total_timesteps=100000, log_interval=10)
 
     model.save("sac_trial")
 
