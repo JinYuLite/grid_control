@@ -16,7 +16,15 @@ class GridEnv(gym.Env):
 
         # Define action and observation space    
         ACTION_DIM = 54 * 2
-        self.action_space = gym.spaces.Box(low=np.finfo(np.float32).min, high=np.finfo(np.float32).max, shape=(ACTION_DIM,), dtype=np.float32) 
+        # self.action_space = gym.spaces.Box(low=np.finfo(np.float32).min, high=np.finfo(np.float32).max, shape=(ACTION_DIM,), dtype=np.float32) 
+        # self.action_space = gym.spaces.Box(low=-0.05, high=0.05, shape=(ACTION_DIM,), dtype=np.float32) 
+        action_v_low = [0] * 54
+        action_v_high = [1] * 54
+        action_p_low = [-0.05] * 54
+        action_p_high = [0.05] * 54
+        action_low = np.array(action_p_low + action_v_low)
+        action_high = np.array(action_p_high + action_v_high)
+        self.action_space = gym.spaces.Box(low=action_low, high=action_high, dtype=np.float32) 
 
         tmp_obs = self.env.reset()
         tmp_observation = vectorize(tmp_obs)
@@ -62,9 +70,11 @@ class GridEnv(gym.Env):
             masked_act[k] = real_v
 
         adjust_gen_p_low = self.legal_act_space["adjust_gen_p"].low
-        adjust_gen_p_high = self.legal_act_space["adjust_gen_p"].low
+        # JIANHONG: fix bugs
+        adjust_gen_p_high = self.legal_act_space["adjust_gen_p"].high
         adjust_gen_v_low = self.legal_act_space["adjust_gen_v"].low
-        adjust_gen_p_high = self.legal_act_space["adjust_gen_p"].low
+        # JIANHONG: fix bugs
+        adjust_gen_p_high = self.legal_act_space["adjust_gen_p"].high
         return masked_act
 
 
@@ -76,24 +86,31 @@ def vectorize(obs):
     """
     new_obs = []
     # gen_p, gen_q, gen_v: 机组发电
-    new_obs.extend(obs.gen_p)
-    new_obs.extend(obs.gen_q)
-    new_obs.extend(obs.gen_v)
+    new_obs.extend(obs.gen_p / np.max(np.abs(obs.gen_p)))
+    new_obs.extend(obs.gen_q / np.max(np.abs(obs.gen_q)))
+    new_obs.extend(obs.gen_v / np.max(np.abs(obs.gen_v)))
 
     # gen status, steps_to_recover_gen, steps_to_close_gen: 机组状态, int类型
     new_obs.extend(list(obs.gen_status))
-    new_obs.extend(list(obs.steps_to_recover_gen))
-    new_obs.extend(list(obs.steps_to_close_gen))
+    new_obs.extend( list(obs.steps_to_recover_gen / 100.) )
+    new_obs.extend( list(obs.steps_to_close_gen / 100.) )
+    # print (f"This is the gen_status: {obs.gen_status}")
+    # print (f"This is the steps to recover gen: {obs.steps_to_recover_gen}")
+    # print (f"This is the steps to close gen: {obs.steps_to_close_gen}")
 
     # curstep_renewable_gen_p_max, nextstep_newable_gen_p_max: 新能源发电
-    new_obs.extend(obs.curstep_renewable_gen_p_max)
-    new_obs.extend(obs.nextstep_renewable_gen_p_max)
+    # new_obs.extend(obs.curstep_renewable_gen_p_max)
+    # new_obs.extend(obs.nextstep_renewable_gen_p_max)
+    renewable_gen_p_max_diff = np.array(obs.nextstep_renewable_gen_p_max) - np.array(obs.curstep_renewable_gen_p_max)
+    new_obs.extend( ( renewable_gen_p_max_diff / max(np.max(np.abs(renewable_gen_p_max_diff)), 1e-7) ).tolist() )
 
     # load_p, load_q, load_v, nextstep_load_p: 负荷耗电
-    new_obs.extend(obs.load_p)
-    new_obs.extend(obs.load_q)
-    new_obs.extend(obs.load_v)
-    new_obs.extend(obs.nextstep_load_p)
+    # new_obs.extend(obs.load_p)
+    new_obs.extend( obs.load_q / max(np.max(np.abs(obs.load_q)), 1e-7) )
+    new_obs.extend( obs.load_v / max(np.max(np.abs(obs.load_v)), 1e-7) )
+    load_p_diff = np.array(obs.nextstep_load_p) - np.array(obs.load_p)
+    new_obs.extend( ( load_p_diff / max(np.max(np.abs(load_p_diff)), 1e-7) ).tolist() )
+    # new_obs.extend(obs.nextstep_load_p)
 
     # 线路信息, 节点信息
 
