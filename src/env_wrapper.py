@@ -86,9 +86,9 @@ def vectorize(obs):
     """
     new_obs = []
     # gen_p, gen_q, gen_v: 机组发电
-    new_obs.extend(obs.gen_p / np.max(np.abs(obs.gen_p)))
-    new_obs.extend(obs.gen_q / np.max(np.abs(obs.gen_q)))
-    new_obs.extend(obs.gen_v / np.max(np.abs(obs.gen_v)))
+    new_obs.extend(obs.gen_p / max(np.max(np.abs(obs.gen_p)), 1e-7) )
+    new_obs.extend(obs.gen_q / max(np.max(np.abs(obs.gen_q)), 1e-7) )
+    new_obs.extend(obs.gen_v / max(np.max(np.abs(obs.gen_v)), 1e-7) )
 
     # gen status, steps_to_recover_gen, steps_to_close_gen: 机组状态, int类型
     new_obs.extend(list(obs.gen_status))
