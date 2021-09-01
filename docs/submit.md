@@ -1,3 +1,30 @@
+
+# 提交模型
+> 训练好模型后提交的线上平台    
+
+
+## 打包提交文件
+1. 将Agent主文件和模型拷贝到`submission`目录下       
+    ```bash
+        ln -s ../src/Agent/sac_agent.py agent.py
+        cp ../src/sac_trial.zip model.zip
+    ```
+！注意`agent.py`必须包含一个名为`Agent`的类。`Agent`类`__init__`函数输入参数为`settings`和`this_directory_path`，以及`act`函数输入参数为`obs`、`reward`和`done`。
+
+2. 拷贝依赖文件，将`agent.py`依赖的文件拷贝到`submission`目录下，一般只需要创建软连接即可，例如
+    ```bash
+        ln -s ../src/stable_baselines3 .
+    ```
+
+3. 压缩`submission`文件夹
+    ```bash
+         zip -r submission.zip submission
+    ```
+    
+4. 上传压缩文件
+
+
+
 ## 评估镜像线下测试流程
 
 1. 下载docker镜像：grid_competition_test_latest.tar.gz​
