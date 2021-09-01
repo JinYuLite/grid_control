@@ -1,4 +1,5 @@
 import numpy as np
+import copy
 
 from Agent.BaseAgent import BaseAgent
 from utilize.form_action import *
@@ -11,15 +12,35 @@ class RLAgent(BaseAgent):
         super().__init__(num_gen)
         # self.seed = seed
         # self.v_action = np.zeros(num_gen)
+        
 
     def act(self, obs, reward=0.0, done=False):
-        model = SAC.load("../sac_trial")
+        model = SAC.load("./sac_trial")
+        self.legal_act_space = obs.action_space
         obs = vectorize(obs)
         action = model.predict(obs, deterministic=True)
         action = unvectorize(action[0])
+        action = self._mask_act(action)
 
         return action
 
+    def _mask_act(self, act):
+
+        masked_act = {}
+        for k, v in self.legal_act_space.items():
+            v_low, v_high = v.low, v.high
+            real_v = copy.deepcopy(act[k])
+            real_v = np.where(real_v>v_low, real_v, v_low)
+            real_v = np.where(real_v<v_high, real_v, v_high)
+            masked_act[k] = real_v
+
+        adjust_gen_p_low = self.legal_act_space["adjust_gen_p"].low
+        # JIANHONG: fix bugs
+        adjust_gen_p_high = self.legal_act_space["adjust_gen_p"].high
+        adjust_gen_v_low = self.legal_act_space["adjust_gen_v"].low
+        # JIANHONG: fix bugs
+        adjust_gen_p_high = self.legal_act_space["adjust_gen_p"].high
+        return masked_act
 
 def vectorize(obs):
     """
@@ -65,6 +86,6 @@ def unvectorize(action):
     """
     action = np.array(action).flatten().astype(np.float32)
     act_dim = action.shape[0] // 2
-    act = {"adjust_gen_p": np.clip(action[:act_dim], -0.05, 0.05),
-           "adjust_gen_v": np.clip(action[act_dim:], 0, 1)}
+    act = {"adjust_gen_p": action[:act_dim],
+           "adjust_gen_v": action[act_dim:]}
     return act

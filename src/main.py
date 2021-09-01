@@ -3,6 +3,7 @@ import numpy as np
 
 from Agent.DoNothingAgent import DoNothingAgent
 from Agent.RandomAgent import RandomAgent
+from Agent.RLAgent import RLAgent
 from Environment.base_env import Environment
 from utilize.settings import settings
 
@@ -10,8 +11,8 @@ from env_wrapper import GridEnv
 
 def run_task(my_agent):
 
-    env_inst = Environment(settings, "EPRIReward")
-    env = GridEnv(env_inst) 
+    env = Environment(settings, "EPRIReward")
+    # env = GridEnv(env_inst) 
 
     for episode in range(max_episode):
         print('\n------ episode ', episode)
@@ -34,12 +35,12 @@ def run_task(my_agent):
             # print("adjust_gen_p: ", action['adjust_gen_p'][:10])
 
             # for wrapped environment
-            print(obs.shape)
-            action = np.random.random(108).astype(np.float32)
-            print(action.shape)
-
+            # print(obs.shape)
+            # action = np.random.random(108).astype(np.float32)
+            # print(action.shape)
+            action = my_agent.act(obs)
             obs, reward, done, info = env.step(action)
-            print('info:', info)
+            print('info:', reward)
             if done:
                 break
 
@@ -47,6 +48,6 @@ if __name__ == "__main__":
     max_timestep = 10  # 最大时间步数
     max_episode = 2  # 回合数
 
-    my_agent = RandomAgent(settings.num_gen)
+    my_agent = RLAgent(settings.num_gen)
 
     run_task(my_agent)
