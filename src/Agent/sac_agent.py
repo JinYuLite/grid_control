@@ -7,6 +7,10 @@ from stable_baselines3 import PPO, DDPG, TD3, SAC
 from utils import vec_obs, devec_action, mask_act, NUM_GEN
 
 class Agent():
+    """
+        the name should be "Agent"
+        input args are "settings" and "this_directory_path"
+    """
 
     def __init__(self, settings, this_directory_path):
         self.settings = settings
