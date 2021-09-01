@@ -9,40 +9,40 @@ from utilize.settings import settings
 
 from env_wrapper import GridEnv
 
-def run_task(my_agent):
+# def run_task(my_agent):
 
-    env = Environment(settings, "EPRIReward")
-    # env = GridEnv(env_inst) 
+#     env = Environment(settings, "EPRIReward")
+#     # env = GridEnv(env_inst) 
 
-    for episode in range(max_episode):
-        print('\n------ episode ', episode)
-        print('------ reset ')
-        obs = env.reset()
+#     for episode in range(max_episode):
+#         print('\n------ episode ', episode)
+#         print('------ reset ')
+#         obs = env.reset()
 
-        reward = 0.0
-        done = False
+#         reward = 0.0
+#         done = False
         
-        # while not done:
-        for timestep in range(max_timestep):
-            print('------ step ', timestep)
+#         # while not done:
+#         for timestep in range(max_timestep):
+#             print('------ step ', timestep)
 
-            # for raw environment
-            # ids = [i for i,x in enumerate(obs.rho) if x > 1.0]
-            # print("gen p: ", obs.gen_p[:10])
-            # print("overflow rho: ", [obs.rho[i] for i in ids])    
+#             # for raw environment
+#             # ids = [i for i,x in enumerate(obs.rho) if x > 1.0]
+#             # print("gen p: ", obs.gen_p[:10])
+#             # print("overflow rho: ", [obs.rho[i] for i in ids])    
 
-            # action = my_agent.act(obs, reward, done)
-            # print("adjust_gen_p: ", action['adjust_gen_p'][:10])
+#             # action = my_agent.act(obs, reward, done)
+#             # print("adjust_gen_p: ", action['adjust_gen_p'][:10])
 
-            # for wrapped environment
-            # print(obs.shape)
-            # action = np.random.random(108).astype(np.float32)
-            # print(action.shape)
-            action = my_agent.act(obs)
-            obs, reward, done, info = env.step(action)
-            print('info:', reward)
-            if done:
-                break
+#             # for wrapped environment
+#             # print(obs.shape)
+#             # action = np.random.random(108).astype(np.float32)
+#             # print(action.shape)
+#             action = my_agent.act(obs)
+#             obs, reward, done, info = env.step(action)
+#             print('info:', reward)
+#             if done:
+#                 break
 
 if __name__ == "__main__":
     max_timestep = 100  # 最大时间步数
@@ -50,4 +50,4 @@ if __name__ == "__main__":
 
     my_agent = RLAgent(settings.num_gen)
 
-    run_task(my_agent)
+    # run_task(my_agent)
