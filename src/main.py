@@ -45,8 +45,8 @@ def run_task(my_agent):
                 break
 
 if __name__ == "__main__":
-    max_timestep = 10  # 最大时间步数
-    max_episode = 2  # 回合数
+    max_timestep = 100  # 最大时间步数
+    max_episode = 10  # 回合数
 
     my_agent = RLAgent(settings.num_gen)
 
