@@ -38,7 +38,7 @@ def run_test(my_agent):
                 break
 
 if __name__ == "__main__":
-    max_timestep = 10  # 最大时间步数
+    max_timestep = 100  # 最大时间步数
     max_episode = 10  # 回合数
 
     # my_agent = RandomAgent(settings.num_gen)

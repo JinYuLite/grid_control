@@ -19,9 +19,10 @@ class RLAgent(BaseAgent):
         self.legal_act_space = obs.action_space
         obs = vectorize(obs)
         action = model.predict(obs, deterministic=True)
-        action = unvectorize(action[0])
+        action = self.clip_actions(action[0])
+        action = unvectorize(action)
         action = self._mask_act(action)
-
+        # action = self.clip_actions(action)
         return action
 
     def _mask_act(self, act):
@@ -41,6 +42,15 @@ class RLAgent(BaseAgent):
         # JIANHONG: fix bugs
         adjust_gen_p_high = self.legal_act_space["adjust_gen_p"].high
         return masked_act
+
+    def clip_actions(self, actions):
+        action_v_low = [0] * 54
+        action_v_high = [1] * 54
+        action_p_low = [-0.05] * 54
+        action_p_high = [0.05] * 54
+        action_low = np.array(action_p_low + action_v_low)
+        action_high = np.array(action_p_high + action_v_high)
+        return np.clip(actions, action_low, action_high)
 
 def vectorize(obs):
     """
