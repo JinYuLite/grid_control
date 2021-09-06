@@ -107,9 +107,9 @@
     - gen_q: 54, [-1,1] // 归一化除以该时刻最大值
     - gen_v: 54, [0,1] // 归一化除以该时刻最大值
     - gen_status: 54, {0,1}
-    - steps_to_recover_gen: 54, [0,0.4] // 归一化处以100
-    - steps_to_close_gen: 54, [0,0.4] // 归一化处以100
+    - steps_to_recover_gen: 54, [0,0.4] // 归一化除以100
+    - steps_to_close_gen: 54, [0,0.4] // 归一化除以100
     - renewable_gen_p_max_diff: 54, [-1,1] // 归一化除以该时刻最大值
-    - load_p_diff: 91, [-1,1] // 归一化除以该时刻最大值，不是time independent
+    - load_p_diff: 91, [-1,1] // 归一化除以该时刻最大值
     - load_q: 91, [-1,1] // 归一化除以该时刻最大值
     - load_v: 91, [0,1] // 归一化除以该时刻最大值
