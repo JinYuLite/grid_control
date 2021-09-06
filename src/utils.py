@@ -65,10 +65,24 @@ def unvec_action(action, legal_act_space):
     """
     action = np.array(action).flatten().astype(np.float32)
     act_dim = action.shape[0] // 2
-    act = {"adjust_gen_p": clip_act(action[:act_dim]*0.05, legal_act_space["adjust_gen_p"]),
-           "adjust_gen_v": clip_act(action[act_dim:], legal_act_space["adjust_gen_v"])}
+    act = {"adjust_gen_p": action[:act_dim] * 0.05,
+           "adjust_gen_v": action[act_dim:] * 0.5 + 0.5}
+    act = clip_act(act, legal_act_space)
     return act
 
 def clip_act(act, legal_act_space):
-    return np.clip(act, legal_act_space.low, legal_act_space.high)
+    new_act = {}
+    for k, v in act.items():
+        low_bound = legal_act_space[k].low
+        high_bound = legal_act_space[k].high
+        # unscaled_act = (v + 1) / 2.0 * (high_bound - low_bound) + low_bound
+        unscaled_act = np.clip(v, low_bound, high_bound)
+        new_act[k] = unscaled_act
+    return new_act
+
+
+
+
+
+
 
