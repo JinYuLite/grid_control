@@ -103,7 +103,6 @@
 
 ### 向量化Observation
 #### 9.4
-M: (1) 归一化变量用的是当前时刻的最大值，time dependent (2) 有一些变量用的diff，有一些用的绝对值 (3) 缺少每个bus节点的信息
     - gen_p: 54, [-1,1] // normalized by curtime's max abs value
     - gen_q: 54, [-1,1] // normalized by curtime's max abs value
     - gen_v: 54, [0,1] // normalized by curtime's max abs value
@@ -113,7 +112,8 @@ M: (1) 归一化变量用的是当前时刻的最大值，time dependent (2) 有
     - renewable_gen_p_max_diff: 54, [-1,1] // normalized by curtime's max abs value
     - load_p_diff: 91, [-1,1] // normalized by curtime's max abs value
     - load_q: 91, [-1,1] // normalized by curtime's max abs value
-    - load_v: 91, [0,1] // normalized by curtime's max abs value
+    - load_v: 91, [0,1] // normalized by curtime's max abs value         
+M: (1) 归一化变量用的是当前时刻的最大值，time dependent (2) 有一些变量用的diff，有一些用的绝对值 (3) 缺少每个bus节点的信息
 
 ### 向量化Action
 #### 9.4
