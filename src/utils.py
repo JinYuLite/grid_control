@@ -11,16 +11,17 @@ NUM_GEN = 54
 ################################# 9.5 ##############################
 """
 ### 向量化obs: 
-    - gen_p: 54, [-1,1] // 归一化除以该时刻最大值，不是time independent
-    - gen_q: 54, [-1,1] // 归一化除以该时刻最大值
-    - gen_v: 54, [0,1] // 归一化除以该时刻最大值
+    - gen_p: 54, [-1,1] // normalized by curtime's max abs value
+    - gen_q: 54, [-1,1] // normalized by curtime's max abs value
+    - gen_v: 54, [0,1] // normalized by curtime's max abs value
     - gen_status: 54, {0,1}
-    - steps_to_recover_gen: 54, [0,0.4] // 归一化处以100
-    - steps_to_close_gen: 54, [0,0.4] // 归一化处以100
-    - renewable_gen_p_max_diff: 54, [-1,1] // 归一化除以该时刻最大值
-    - load_p_diff: 91, [-1,1] // 归一化除以该时刻最大值，不是time independent
-    - load_q: 91, [-1,1] // 归一化除以该时刻最大值
-    - load_v: 91, [0,1] // 归一化除以该时刻最大值
+    - steps_to_recover_gen: 54, [0,0.4] // normalized by 100
+    - steps_to_close_gen: 54, [0,0.4] // normalized by 100
+    - renewable_gen_p_max_diff: 54, [-1,1] // normalized by curtime's max abs value
+    - load_p_diff: 91, [-1,1] // normalized by curtime's max abs value
+    - load_q: 91, [-1,1] // normalized by curtime's max abs value
+    - load_v: 91, [0,1] // normalized by curtime's max abs value  
+M: (1) 归一化变量用的是当前时刻的最大值，time dependent (2) 有一些变量用的diff，有一些用的绝对值 (3) 缺少每个bus节点的信息
 """
 def vec_obs(obs):
     """
@@ -58,7 +59,11 @@ def vec_obs(obs):
     return observation
 
 ################################# 9.5 ##############################
-
+"""
+### 反向量化action: 
+    - adjust_gen_p: [-0.05, 0.05] // use tanh to squash, then clip by legal_act_space
+    - adjust_gen_v: [-0.0, 1.0] // use tanh to squash, then clip by legal_act_space
+"""
 def unvec_action(action, legal_act_space):
     """
         Convert array-like action (range [-1,1]) to act
