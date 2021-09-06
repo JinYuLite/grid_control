@@ -38,9 +38,9 @@
 | grid_loss                    | list[float]  | 1... | *电网损耗（网损值）*                                |
 | action_space                 |              |      | 下一时间步的合法动作空间                            |
 |                              |              |      |                                                     |
-| **gen_p**                    | list[float]  | 54   | 机组有功出力                                        |
+| gen_p                        | list[float]  | 54   | 机组有功出力                                        |
 | gen_q                        | list[float]  | 54   | 机组无功出力                                        |
-| **gen_v**                    | list[float]  | 54   | 发电机电压幅值                                      |
+| gen_v                        | list[float]  | 54   | 发电机电压幅值                                      |
 | target_dispatch              | list[float]  | 54   | 计算*潮流前*机组有功出力                            |
 | actual_dispatch              | list[float]  | 54   | 计算*潮流后*机组有功出力                            |
 | gen_status                   | np.ndarray   | 54   | 机组开关机状态，1表示开机，0表示关机                |
@@ -103,13 +103,20 @@
 
 ### 向量化Observation
 #### 9.4
-    - gen_p: 54, [-1,1] // 归一化除以该时刻最大值，不是time independent
-    - gen_q: 54, [-1,1] // 归一化除以该时刻最大值
-    - gen_v: 54, [0,1] // 归一化除以该时刻最大值
+M: (1) 归一化变量用的是当前时刻的最大值，time dependent (2) 有一些变量用的diff，有一些用的绝对值 (3) 缺少每个bus节点的信息
+    - gen_p: 54, [-1,1] // normalized by curtime's max abs value
+    - gen_q: 54, [-1,1] // normalized by curtime's max abs value
+    - gen_v: 54, [0,1] // normalized by curtime's max abs value
     - gen_status: 54, {0,1}
-    - steps_to_recover_gen: 54, [0,0.4] // 归一化除以100
-    - steps_to_close_gen: 54, [0,0.4] // 归一化除以100
-    - renewable_gen_p_max_diff: 54, [-1,1] // 归一化除以该时刻最大值
-    - load_p_diff: 91, [-1,1] // 归一化除以该时刻最大值
-    - load_q: 91, [-1,1] // 归一化除以该时刻最大值
-    - load_v: 91, [0,1] // 归一化除以该时刻最大值
+    - steps_to_recover_gen: 54, [0,0.4] // normalized by 100
+    - steps_to_close_gen: 54, [0,0.4] // normalized by 100
+    - renewable_gen_p_max_diff: 54, [-1,1] // normalized by curtime's max abs value
+    - load_p_diff: 91, [-1,1] // normalized by curtime's max abs value
+    - load_q: 91, [-1,1] // normalized by curtime's max abs value
+    - load_v: 91, [0,1] // normalized by curtime's max abs value
+
+### 向量化Action
+#### 9.4
+     - adjust_gen_p: [-0.05, 0.05] // use tanh to squash, then clip by legal_act_space
+     - adjust_gen_v: [-0.0, 1.0] // use tanh to squash, then clip by legal_act_space
+     
