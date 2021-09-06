@@ -10,11 +10,11 @@
     - [文档可见](https://github.com/mikezhang95/grid_control/blob/main/docs/env.md#%E5%90%91%E9%87%8F%E5%8C%96observation)
     - 动作空间对于结果更加敏感
     
-- [] Play with Observation/Action/Reward Space；
+- [ ] Play with Observation/Action/Reward Space；
     - 尝试不同的Space方案
     - 简单对Agent调参
     
-- [] 尝试Imitation Learning;
+- [ ] 尝试Imitation Learning;
     - 从表格读取数据，作为label
 
 ### 9.19
