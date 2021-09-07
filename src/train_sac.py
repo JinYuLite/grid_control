@@ -62,6 +62,7 @@ if __name__ == "__main__":
     )
 
     model.learn(total_timesteps=100000, log_interval=10)
-    model.save("../outputs/sac_agent")
-    # env.save("../outputs/norm_env")
+    model.save(os.path.join(save_path, "sac_agent"))
+    # env.save(os.path.join(save_path, "norm_env"))
+
 

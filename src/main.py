@@ -3,51 +3,61 @@ import numpy as np
 
 from Agent.DoNothingAgent import DoNothingAgent
 from Agent.RandomAgent import RandomAgent
-from Agent.RLAgent import RLAgent
+from Agent.sac_agent import Agent as SACAgent
+from Agent.table_agent import TableAgent
 from Environment.base_env import Environment
 from utilize.settings import settings
 
-from env_wrapper import GridEnv
+def run_task(my_agent, max_turn=np.inf):
 
-# def run_task(my_agent):
-
-#     env = Environment(settings, "EPRIReward")
-#     # env = GridEnv(env_inst) 
-
-#     for episode in range(max_episode):
-#         print('\n------ episode ', episode)
-#         print('------ reset ')
-#         obs = env.reset()
-
-#         reward = 0.0
-#         done = False
-        
-#         # while not done:
-#         for timestep in range(max_timestep):
-#             print('------ step ', timestep)
-
-#             # for raw environment
-#             # ids = [i for i,x in enumerate(obs.rho) if x > 1.0]
-#             # print("gen p: ", obs.gen_p[:10])
-#             # print("overflow rho: ", [obs.rho[i] for i in ids])    
-
-#             # action = my_agent.act(obs, reward, done)
-#             # print("adjust_gen_p: ", action['adjust_gen_p'][:10])
-
-#             # for wrapped environment
-#             # print(obs.shape)
-#             # action = np.random.random(108).astype(np.float32)
-#             # print(action.shape)
-#             action = my_agent.act(obs)
-#             obs, reward, done, info = env.step(action)
-#             print('info:', reward)
-#             if done:
-#                 break
-
-if __name__ == "__main__":
-    max_timestep = 100  # 最大时间步数
     max_episode = 10  # 回合数
 
-    my_agent = RLAgent(settings.num_gen)
+    env = Environment(settings, "EPRIReward")
+    # env = GridEnv(env_inst) 
+ 
+    episode_rewards, episode_lengths = [], []
+    for ep in range(max_episode):
+        obs = env.reset()
+        done, reward  = False, 0.0
+        total_reward, total_step = 0.0, 0
 
+        while not done:
+            act = my_agent.act(obs, reward, done)
+            obs, reward, done, info = env.step(act)
+            total_reward += reward
+            total_step += 1
+            if total_step >= max_turn: break
+        episode_rewards.append(total_reward)
+        episode_lengths.append(total_step)
+        print(info)
+
+    mean_reward, std_reward = np.mean(episode_rewards), np.std(episode_rewards)
+    mean_ep_length, std_ep_length = np.mean(episode_lengths), np.std(episode_lengths)
+
+    print("=== {} Test on {} Episodes ===".format(my_agent.__class__.__name__,max_episode))
+    print("episode_reward: {:.2f} +/- {:.2f}".format(mean_reward,std_reward))
+    print("episode_length: {:.2f} +/- {:.2f}\n".format(mean_ep_length, std_ep_length))
+
+if __name__ == "__main__":
+    
+    path = "../outputs"
+
+    # do noting agent
+    # my_agent = DoNothingAgent(settings, path)
     # run_task(my_agent)
+
+    # # random agent
+    # my_agent = RandomAgent(settings, path)
+    # run_task(my_agent)
+
+    # # rl agent
+    # my_agent = SACAgent(settings, path)
+    # run_task(my_agent)
+
+    # table agent
+    my_agent = TableAgent(settings, path)
+    run_task(my_agent, max_turn=1)
+
+
+
+

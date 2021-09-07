@@ -3,12 +3,11 @@ import numpy as np
 from Agent.BaseAgent import BaseAgent
 from utilize.form_action import *
 
-class RandomAgent(BaseAgent):
+class RandomAgent():
 
-    def __init__(self, num_gen, seed=None):
-        BaseAgent.__init__(self, num_gen)
+    def __init__(self, settings, this_directory_path, seed=None):
         self.seed = seed
-        self.v_action = np.zeros(num_gen)
+        self.v_action = np.zeros(settings.num_gen)
 
     def act(self, obs, reward=0.0, done=False):
         adjust_gen_p_action_space = obs.action_space['adjust_gen_p']

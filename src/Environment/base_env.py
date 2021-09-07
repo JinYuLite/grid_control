@@ -55,12 +55,17 @@ class Environment:
             2. The first row of the csv file is the header.
         """
         row_idx = self.sample_idx + 1 
-        grid.readdata(row_idx, settings.load_p_filepath, settings.load_q_filepath, settings.gen_p_filepath,
-                      settings.gen_q_filepath)
+        grid.readdata(row_idx, settings.load_p_filepath, settings.load_q_filepath, settings.gen_p_filepath, settings.gen_q_filepath)
 
         injection_gen_p = self._round_p(grid.itime_unp[0])
         grid.env_feedback(settings.name_index, injection_gen_p, [], row_idx, [])
         rounded_gen_p = self._round_p(grid.prod_p[0])
+
+        # MARK: Create a new grid for next step
+        next_grid = example.Print()
+        next_grid.readdata(row_idx+1, settings.load_p_filepath, settings.load_q_filepath, settings.gen_p_filepath, settings.gen_q_filepath)
+        next_injection_gen_p = self._round_p(next_grid.itime_unp[0])
+        next_grid.env_feedback(settings.name_index, next_injection_gen_p, [], row_idx+1, [])
 
         self._update_gen_status(injection_gen_p)
         self._check_gen_status(injection_gen_p, rounded_gen_p)
@@ -85,7 +90,8 @@ class Environment:
             curstep_renewable_gen_p_max=curstep_renewable_gen_p_max,
             nextstep_renewable_gen_p_max=nextstep_renewable_gen_p_max,
             rounded_gen_p=rounded_gen_p,
-            nextstep_load_p = nextstep_load_p
+            nextstep_load_p = nextstep_load_p,
+            next_grid = next_grid
         )
         return copy.deepcopy(self.obs)
 
@@ -167,7 +173,8 @@ class Environment:
             curstep_renewable_gen_p_max=curstep_renewable_gen_p_max,
             nextstep_renewable_gen_p_max=nextstep_renewable_gen_p_max,
             rounded_gen_p=rounded_gen_p,
-            nextstep_load_p=nextstep_load_p
+            nextstep_load_p = nextstep_load_p,
+            next_grid=grid
         )
 
         self.reward = self.get_reward(self.obs, last_obs)

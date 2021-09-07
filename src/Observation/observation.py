@@ -3,7 +3,7 @@ import copy
 class Observation:
     def __init__(self, grid, timestep, action_space, steps_to_reconnect_line, count_soft_overflow_steps,
                  rho, gen_status, steps_to_recover_gen, steps_to_close_gen, curstep_renewable_gen_p_max,
-                 nextstep_renewable_gen_p_max, rounded_gen_p, nextstep_load_p):
+                 nextstep_renewable_gen_p_max, rounded_gen_p, nextstep_load_p, next_grid):
         self.timestep = timestep
         self.vTime = grid.vTime
         self.gen_p = rounded_gen_p
@@ -40,3 +40,7 @@ class Observation:
         self.curstep_renewable_gen_p_max = curstep_renewable_gen_p_max  # 当前时间步新能源机组的最大有功出力
         self.nextstep_renewable_gen_p_max = nextstep_renewable_gen_p_max  # 下一时间步新能源机组的最大有功出力
         self.nextstep_load_p = nextstep_load_p                       # 下一时间步的负荷
+
+        self.nextstep_gen_p = next_grid.prod_p[0]
+        self.nextstep_gen_v = next_grid.prod_v[0]
+

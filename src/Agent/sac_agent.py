@@ -21,7 +21,7 @@ class Agent():
         # convert class obs to vectorized observation
         observation = vec_obs(obs) 
         # predict
-        action = self.model.predict(observation, deterministic=True)
+        action, _ = self.model.predict(observation, deterministic=True)
         # convert vectorized action to dict-like act
-        act = vec_action(action, obs.action_space) 
+        act = unvec_action(action, obs.action_space) 
         return act

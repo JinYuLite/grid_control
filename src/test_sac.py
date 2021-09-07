@@ -13,6 +13,7 @@ def run_test():
     max_episode = 10 
 
     # load agent parameters 
+    # agent = SAC.load("../outputs/sac_agent")
     agent = SAC.load("sac_trial")
 
     # define test environment
@@ -33,6 +34,8 @@ def run_test():
             total_step += 1
         episode_rewards.append(total_reward)
         episode_lengths.append(total_step)
+        print(info)
+        
 
     # episode_rewards, episode_lengths = evaluate_policy(
     #         agent,

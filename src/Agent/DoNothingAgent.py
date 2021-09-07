@@ -1,12 +1,11 @@
 import numpy as np
 
-from Agent.BaseAgent import BaseAgent
 from utilize.form_action import *
 
-class DoNothingAgent(BaseAgent):
+class DoNothingAgent():
 
-    def __init__(self, num_gen):
-        BaseAgent.__init__(self, num_gen)
+    def __init__(self, settings, file_path):
+        self.num_gen = settings.num_gen
         self.action = form_action(np.zeros(self.num_gen), np.zeros(self.num_gen))
 
     def act(self, obs, reward, done=False):
