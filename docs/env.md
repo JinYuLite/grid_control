@@ -27,6 +27,13 @@
 
 通过`Enviornment.get_reward(self.obs, last_obs)`计算得到
 
+* line_over_flow_reward * 1
+* renewable_consumption_reward * 2
+* running_cost_reward * 1: 机组运行费用，归一化后基本上一直是-1
+* balanced_gen_reward * 3: 
+* gen_reactivate_power_reward * 1
+* sub_voltage_reward * 1
+
 
 ### Observation
 
@@ -100,6 +107,11 @@
 
 4. forecast reader给了后一时刻的信息
     > 通过预测下一时刻的信息更好的控制机器，之类直接给出下一时刻的真实负载和新能源发电信息。
+
+5. legal act space 是怎么计算出来的
+
+6. 如何满足平衡机上下限约束
+
 
 ### 向量化Observation
 #### 9.4
