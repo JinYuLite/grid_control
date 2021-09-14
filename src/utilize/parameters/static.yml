@@ -20,7 +20,7 @@ ramp_rate: 0.05
 coeff_line_over_flow: 1
 coeff_renewable_consumption: 2
 coeff_running_cost: 1
-coeff_balanced_gen: 3
+coeff_balanced_gen: 4
 coeff_gen_reactive_power: 1
 coeff_sub_voltage: 1
 

@@ -24,7 +24,7 @@ class Observation:
         self.a_ex = grid.a_ex[0]
         self.line_status = grid.line_status[0]
         self.grid_loss = grid.grid_loss
-        self.busname = grid.busname
+        self.bus_v = grid.bus_v
         self.bus_gen = grid.bus_gen
         self.bus_load = grid.bus_load
         self.bus_branch =grid.bus_branch
@@ -43,4 +43,3 @@ class Observation:
 
         self.nextstep_gen_p = next_grid.prod_p[0]
         self.nextstep_gen_v = next_grid.prod_v[0]
-

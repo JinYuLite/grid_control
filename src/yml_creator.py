@@ -33,8 +33,14 @@ def read_grid_data():
     grid.readdata(1, load_p_filepath, load_q_filepath, gen_p_filepath, gen_q_filepath)
     grid.env_feedback(grid.name_unp, grid.itime_unp[0], [], 1, [])
 
-    # 机组名称
+    # 线路名称
     lnname = grid.lnname
+
+    # 负荷名称
+    ldname = grid.ldname
+
+    # 节点名称
+    busname = grid.busname
 
     # 不同类型机组机组编号
     gen_type = grid.gen_type
@@ -75,6 +81,8 @@ def read_grid_data():
 
     dict_ = {
         'lnname': lnname,
+        'ldname': ldname,
+        'busname': busname,
         'max_gen_p': max_gen_p,
         'min_gen_p': min_gen_p,
         'max_gen_q': max_gen_q,
@@ -108,7 +116,6 @@ def create_dynamic_yml():
     with open('utilize/parameters/dynamic.yml', 'w+', encoding='utf-8') as f:
         for key, val in dict_.items():
             stream = yaml.dump({key: val}, default_flow_style=True)
-            # 整理格式，方法比较笨，要求不能有nested dict
             f.write(re.sub(r'{|}', '', stream))
 
 
@@ -122,7 +129,6 @@ def merge_dynamic_static_yml():
     with open('utilize/parameters/main.yml', 'w+', encoding='utf-8') as f:
         for key, val in dict_static.items():
             stream = yaml.dump({key: val}, default_flow_style=True)
-            # 整理格式，方法比较笨，要求不能有nested dict
             f.write(re.sub(r'{|}', '', stream))
 
 

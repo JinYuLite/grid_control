@@ -1,8 +1,10 @@
 import math
 
+
 def line_over_flow_reward(obs, settings):
     r = 1 - sum([min(i, 1) for i in obs.rho])/settings.num_line
     return r
+
 
 def renewable_consumption_reward(obs, settings):
     all_gen_p = 0.0
@@ -13,15 +15,20 @@ def renewable_consumption_reward(obs, settings):
     r = all_gen_p / all_gen_p_max
     return r
 
+
 def balanced_gen_reward(obs, settings):
     r = 0.0
     idx = settings.balanced_id
-    if obs.gen_p[idx] > settings.max_gen_p[idx]:
-        r += 1 - obs.gen_p[idx] / settings.max_gen_p[idx]
-    if obs.gen_p[idx] < settings.min_gen_p[idx]:
-        r += obs.gen_p[idx] / settings.min_gen_p[idx] - 1
-    r = 10 * r # Ensure the range of r is [-1,1]
+    max_val = settings.max_gen_p[idx]
+    min_val = settings.min_gen_p[idx]
+    gen_p_val = obs.gen_p[idx]
+    if gen_p_val > max_val:
+        r += abs((gen_p_val - max_val) / max_val)
+    if gen_p_val < min_val:
+        r += abs((gen_p_val - min_val) / min_val)
+    r = -10 * r   # Ensure the range of r is [-1,0]
     return r
+
 
 def running_cost_reward(obs, last_obs, settings):
     r = 0.0
@@ -35,25 +42,28 @@ def running_cost_reward(obs, last_obs, settings):
     r = math.exp(r) - 1
     return r
 
+
 def gen_reactive_power_reward(obs, settings):
     r = 0.0
     for i in range(settings.num_gen):
         if obs.gen_q[i] > settings.max_gen_q[i]:
-            r += (1 - obs.gen_q[i] / settings.max_gen_q[i])
+            r -= abs((obs.gen_q[i] - settings.max_gen_q[i]) / settings.max_gen_q[i])
         if obs.gen_q[i] < settings.min_gen_q[i]:
-            r += (1 - settings.min_gen_q[i] / obs.gen_q[i])
+            r -= abs((obs.gen_q[i] - settings.min_gen_q[i]) / settings.min_gen_q[i])
     r = math.exp(r) - 1
     return r
 
+
 def sub_voltage_reward(obs, settings):
     r = 0.0
-    for i in range(settings.num_gen):
-        if obs.gen_v[i] > settings.max_gen_v[i]:
-            r += (1 - obs.gen_v[i] / settings.max_gen_v[i])
-        if obs.gen_v[i] < settings.min_gen_v[i]:
-            r += (1 - settings.min_gen_v[i] / obs.gen_v[i])
+    for i in range(len(settings.max_bus_v)):
+        if obs.bus_v[i] > settings.max_bus_v[i]:
+            r -= abs((obs.bus_v[i] - settings.max_bus_v[i]) / settings.max_bus_v[i])
+        if obs.bus_v[i] < settings.min_bus_v[i]:
+            r -= abs((obs.bus_v[i] - settings.min_bus_v[i]) / settings.min_bus_v[i])
     r = math.exp(r) - 1
     return r
+
 
 def EPRIReward(obs, last_obs, settings):
     r = settings.coeff_line_over_flow * line_over_flow_reward(obs, settings) + \

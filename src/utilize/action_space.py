@@ -42,21 +42,21 @@ class ActionSpace(object):
                 low[idx] = 0.0
 
                 high[idx] = self.min_gen_p[idx]
-                if steps_to_recover_gen[idx] != 0: # cannot turn on
+                if steps_to_recover_gen[idx] != 0:  # cannot turn on
                     high[idx] = 0.0 
 
             elif gen_p[idx] == self.min_gen_p[idx]:
                 high[idx] = min(max_capa_adjust[idx], max_ramp_adjust[idx])
 
-                if steps_to_close_gen[idx] == 0: # can turn off
+                if steps_to_close_gen[idx] == 0:  # can turn off
                     low[idx] = -self.min_gen_p[idx]
-                else: # cannot turn off
+                else:  # cannot turn off
                     low[idx] = 0.0
 
             elif gen_p[idx] > self.min_gen_p[idx]:
                 low[idx] = max(min_capa_adjust[idx], -max_ramp_adjust[idx])
                 high[idx] = min(max_capa_adjust[idx], max_ramp_adjust[idx])
-                if steps_to_close_gen[idx] == 0: # can turn off
+                if steps_to_close_gen[idx] == 0:  # can turn off
                     low[idx] = max(-gen_p[idx], -max_ramp_adjust[idx])
             else:
                 assert False
@@ -64,7 +64,7 @@ class ActionSpace(object):
     def update_renewable_p(self, low, high, gen_p, nextstep_renewable_gen_p_max):
         for i, idx in enumerate(self.renewable_ids):
             low[idx] = -gen_p[idx]
-            high[idx] = min(self.max_gen_p[idx], nextstep_renewable_gen_p_max[i]) - gen_p[idx]
+            high[idx] = nextstep_renewable_gen_p_max[i] - gen_p[idx]
 
     def get_v_range(self, gen_v):
         low = np.zeros([self.num_gen])

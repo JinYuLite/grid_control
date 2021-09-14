@@ -129,3 +129,7 @@ Werkzeug==2.0.1
 widgetsnbextension==3.5.1
 wrapt==1.12.1
 zipp==3.4.1
+cyipopt==1.0.3
+stable-baselines3==1.1.0
+tensorflow-probability==0.13.0
+spektral==1.0.8
