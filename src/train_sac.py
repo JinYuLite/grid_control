@@ -33,7 +33,6 @@ if __name__ == "__main__":
     env = DummyVecEnv([make_env(save_path, rank=0)])
     # env = VecNormalize(env, norm_obs=True, norm_reward=True)
 
-    policy_kwargs = dict(activation_fn=torch.nn.Tanh) # output: [-1,1]
     # n_actions = env.action_space.shape[-1]
     # action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
     # model = TD3("MlpPolicy", 
@@ -47,6 +46,7 @@ if __name__ == "__main__":
     #             policy_delay=5
     #         )
 
+    policy_kwargs = dict(activation_fn=torch.nn.Tanh) # output: [-1,1]
     model = SAC(
         "MlpPolicy",
         env,
