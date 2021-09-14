@@ -93,42 +93,22 @@
 
 ```
 
-
-### QAs:
-
-1. 潮流前，潮流后什么意思
-    > PowerFlow计算收敛之前和之后的状态
-
-2. grid_loss 是怎么计算的，每一步只有一个值？
-    > 传输线路上的耗损
-
-3. 断面
-    > = step
-
-4. forecast reader给了后一时刻的信息
-    > 通过预测下一时刻的信息更好的控制机器，之类直接给出下一时刻的真实负载和新能源发电信息。
-
-5. legal act space 是怎么计算出来的
-
-6. 如何满足平衡机上下限约束
-
-
 ### 向量化Observation
-#### 9.4
-    - gen_p: 54, [-1,1] // normalized by curtime's max abs value
-    - gen_q: 54, [-1,1] // normalized by curtime's max abs value
-    - gen_v: 54, [0,1] // normalized by curtime's max abs value
+#### 9.4版本
+    - gen_p: 54, [-1,1] // dynamic normalized by curtime's max abs value
+    - gen_q: 54, [-1,1] // dynamic normalized by curtime's max abs value
+    - gen_v: 54, [0,1] // dynamic normalized by curtime's max abs value
     - gen_status: 54, {0,1}
     - steps_to_recover_gen: 54, [0,0.4] // normalized by 100
     - steps_to_close_gen: 54, [0,0.4] // normalized by 100
-    - renewable_gen_p_max_diff: 54, [-1,1] // normalized by curtime's max abs value
-    - load_p_diff: 91, [-1,1] // normalized by curtime's max abs value
-    - load_q: 91, [-1,1] // normalized by curtime's max abs value
-    - load_v: 91, [0,1] // normalized by curtime's max abs value         
+    - renewable_gen_p_max_diff: 54, [-1,1] // dynamic normalized by curtime's max abs value
+    - load_p_diff: 91, [-1,1] // dynamic normalized by curtime's max abs value
+    - load_q: 91, [-1,1] // dynamic normalized by curtime's max abs value
+    - load_v: 91, [0,1] // dynamic normalized by curtime's max abs value         
 M: (1) 归一化变量用的是当前时刻的最大值，time dependent (2) 有一些变量用的diff，有一些用的绝对值 (3) 缺少每个bus节点的信息
 
 ### 反向量化Action
-#### 9.4
+#### 9.4版本
      - adjust_gen_p: [-0.05, 0.05] // use tanh to squash, then clip by legal_act_space
      - adjust_gen_v: [-0.0, 1.0] // use tanh to squash, then clip by legal_act_space
      
