@@ -89,7 +89,7 @@ def test(model, device, test_loader, criterion, action_only=False):
                 action_prediction = logits
                 target = target.long()
 
-            test_loss = criterion(action_prediction, target)
+            test_loss += criterion(action_prediction, target) * len(data)
     test_loss /= len(test_loader.dataset)
     print(f"Test set: Average loss: {test_loss:.4f}")
 
@@ -127,11 +127,12 @@ def pretrain_agent(
     )
 
     # Define an Optimizer and a learning rate schedule.
-    optimizer = torch.optim.RMSprop(model.parameters(), lr=learning_rate, weight_decay=0.01)
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     # Now we are finally ready to train the policy model.
     action_only = ~isinstance(student, (A2C, PPO))
     for epoch in range(1, epochs + 1):
+        print("=== Epoch {} ===".format(epoch))
         train(model, device, train_loader, optimizer, criterion, log_interval, action_only)
         test(model, device, test_loader, criterion, action_only)
 
@@ -159,10 +160,11 @@ if __name__ == "__main__":
         )
 
     # start behavior cloing
+    sac_student = SAC.load("sac_trial")
     pretrain_agent(
         sac_student, train_expert_dataset, test_expert_dataset,
         epochs=100,
-        learning_rate=0.001,
+        learning_rate=0.01,
         log_interval=100,
         no_cuda=False,
         seed=1,
