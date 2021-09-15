@@ -1,8 +1,9 @@
-
 import os, sys
 import numpy as np
+import gym
 import torch 
 from torch.utils.data.dataset import Dataset, random_split
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
 from Environment.base_env import Environment
 from env_wrapper import GridEnv
@@ -17,18 +18,14 @@ class ExpertDataSet(Dataset):
     def __init__(self, data_path):
 
         # read from file
-        with open(data_path, "r") as rf:
-            lines = rf.readlines()
-
-        expert_observations, expert_actions = [], []
-        for line in lines:
-            obs, action = line.split("\t")
-            expert_observations.append(obs.split(" "))
-            expert_actions.append(action.split(" "))
+        data = torch.load(data_path)
 
         # convert to torch
-        self.observations = torch.tensor(expert_observations, dtype=torch.double)
-        self.actions = torch.tensor(expert_actions, dtype=torch.double)
+        self.observations = torch.tensor(data["observations"], dtype=torch.double)
+        self.actions = torch.tensor(data["actions"], dtype=torch.double)
+
+        print("Dataset Loaded.")
+        print("Observation Shape: {} | Action Shape: {}".format(data["observations"].shape, data["actions"].shape))
 
     def __getitem__(self, index):
         return (self.observations[index], self.actions[index])
@@ -36,7 +33,7 @@ class ExpertDataSet(Dataset):
     def __len__(self):
         return len(self.observations)
 
-def train(model, device, train_loader, optimizer, criterion, log_interval):
+def train(model, device, train_loader, optimizer, criterion, log_interval, action_only=False):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
@@ -44,7 +41,7 @@ def train(model, device, train_loader, optimizer, criterion, log_interval):
 
         if isinstance(env.action_space, gym.spaces.Box):
             # A2C/PPO policy outputs actions, values, log_prob
-            if isinstance(student, (A2C, PPO)):
+            if not action_only:
                 action, _, _ = model(data)
             # SAC/TD3 policy outputs actions only
             else:
@@ -70,7 +67,7 @@ def train(model, device, train_loader, optimizer, criterion, log_interval):
                 )
             )
 
-def test(model, device, test_loader, criterion):
+def test(model, device, test_loader, criterion, action_only=False):
     model.eval()
     test_loss = 0
     with torch.no_grad():
@@ -79,7 +76,7 @@ def test(model, device, test_loader, criterion):
 
             if isinstance(env.action_space, gym.spaces.Box):
                 # A2C/PPO policy outputs actions, values, log_prob
-                if isinstance(student, (A2C, PPO)):
+                if not action_only:
                     action, _, _ = model(data)
                 # SAC/TD3 policy outputs actions only
                 else:
@@ -98,7 +95,7 @@ def test(model, device, test_loader, criterion):
 
 
 def pretrain_agent(
-    student, train_expert_dataset, test_expert_dataset
+    student, train_expert_dataset, test_expert_dataset,
     batch_size=64,
     test_batch_size=64,
     epochs=1000,
@@ -130,12 +127,13 @@ def pretrain_agent(
     )
 
     # Define an Optimizer and a learning rate schedule.
-    optimizer = torch.optim.RMSProp(model.parameters(), lr=learning_rate)
+    optimizer = torch.optim.RMSprop(model.parameters(), lr=learning_rate, weight_decay=0.01)
 
     # Now we are finally ready to train the policy model.
+    action_only = ~isinstance(student, (A2C, PPO))
     for epoch in range(1, epochs + 1):
-        train(model, device, train_loader, optimizer, criterion, log_interval):
-        test(model, device, test_loader, criterion)
+        train(model, device, train_loader, optimizer, criterion, log_interval, action_only)
+        test(model, device, test_loader, criterion, action_only)
 
     # end training
     return
@@ -152,7 +150,8 @@ if __name__ == "__main__":
     )
 
     # load train/test expert dataset
-    expert_dataset = ExpertDataSet("./expert_data.pkl")
+    expert_path = "./imitation_learning/table_expert.txt"
+    expert_dataset = ExpertDataSet(expert_path)
     train_size = int(0.8 * len(expert_dataset))
     torch.manual_seed(0)
     train_expert_dataset, test_expert_dataset = random_split(
@@ -162,14 +161,15 @@ if __name__ == "__main__":
     # start behavior cloing
     pretrain_agent(
         sac_student, train_expert_dataset, test_expert_dataset,
-        epochs=3,
-        learning_rate=1.0,
+        epochs=100,
+        learning_rate=0.001,
         log_interval=100,
-        no_cuda=True,
+        no_cuda=False,
         seed=1,
-        batch_size=64,
+        batch_size=32,
         test_batch_size=1000,
         )
     
     # save student model
-    sac_student.save("sac_student")
+    sac_student.save("imitation_learning/sac_student")
+

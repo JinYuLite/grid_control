@@ -5,3 +5,5 @@ outputs/
 data/gridsim-master-0818
 **/.DS_Store
 **/nohup.out
+src/imitation_learning/*.txt
+src/imitation_learning/*.zip

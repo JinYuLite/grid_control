@@ -43,20 +43,26 @@ if __name__ == "__main__":
     path = "../outputs"
 
     # do noting agent
-    # my_agent = DoNothingAgent(settings, path)
-    # run_task(my_agent)
+    my_agent = DoNothingAgent(settings, path)
+    run_task(my_agent)
 
-    # # random agent
-    # my_agent = RandomAgent(settings, path)
-    # run_task(my_agent)
+    # random agent
+    my_agent = RandomAgent(settings, path)
+    run_task(my_agent)
 
-    # # rl agent
-    # my_agent = SACAgent(settings, path)
-    # run_task(my_agent)
+    # rl agent
+    # sac trial
+    settings["model_name"] = "sac_trial"
+    my_agent = SACAgent(settings, path)
+    run_task(my_agent)
+    # sac student
+    settings["model_name"] = "sac_student"
+    my_agent = SACAgent(settings, path)
+    run_task(my_agent)
 
     # table agent
-    my_agent = TableAgent(settings, path)
-    run_task(my_agent, max_turn=1)
+    # my_agent = TableAgent(settings, path)
+    # run_task(my_agent, max_turn=1)
 
 
 

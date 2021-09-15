@@ -84,10 +84,3 @@ def clip_act(act, legal_act_space):
         unscaled_act = np.clip(v, low_bound, high_bound)
         new_act[k] = unscaled_act
     return new_act
-
-
-
-
-
-
-
