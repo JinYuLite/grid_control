@@ -105,10 +105,15 @@
     - load_p_diff: 91, [-1,1] // dynamic normalized by curtime's max abs value
     - load_q: 91, [-1,1] // dynamic normalized by curtime's max abs value
     - load_v: 91, [0,1] // dynamic normalized by curtime's max abs value         
-M: (1) 归一化变量用的是当前时刻的最大值，time dependent (2) 有一些变量用的diff，有一些用的绝对值 (3) 缺少每个bus节点的信息
+Mark: (1) 归一化变量用的是当前时刻的最大值，time dependent (2) 有一些变量用的diff，有一些用的绝对值 (3) 缺少每个bus节点的信息
 
 ### 反向量化Action
 #### 9.4版本
      - adjust_gen_p: [-0.05, 0.05] // use tanh to squash, then clip by legal_act_space
      - adjust_gen_v: [0.0, 1.0] // use tanh to squash, then clip by legal_act_space
      
+#### 9.26版本
+     - adjust_gen_p: [-10, 10] // use tanh to squash, then clip by legal_act_space
+     - adjust_gen_v: [0,0] // 恒等于0，不控制电压  
+
+
