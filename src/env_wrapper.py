@@ -17,7 +17,8 @@ class GridEnv(gym.Env):
         self.env = env_inst
 
         # Define action space    
-        ACTION_DIM = NUM_GEN * 2
+        # ACTION_DIM = NUM_GEN * 2
+        ACTION_DIM = NUM_GEN 
         self.action_space = gym.spaces.Box(low=-1, high=1, shape=(ACTION_DIM,), dtype=np.float32) # normalize in step
 
         # Define observation space    

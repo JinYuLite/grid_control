@@ -14,7 +14,7 @@ class Agent():
 
     def __init__(self, settings, this_directory_path):
         self.settings = settings
-        model_path = os.path.join(this_directory_path, settings["model_name"])
+        model_path = os.path.join(this_directory_path, "model")
         self.model = SAC.load(model_path)
 
     def act(self, obs, reward=0.0, done=False):

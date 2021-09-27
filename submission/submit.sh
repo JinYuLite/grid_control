@@ -7,6 +7,7 @@ cp ../src/sac_trial.zip model.zip
 # copy other used files
 
 # zip submission 
+cd ..
 zip -r submission.zip submission
 
 # upload submission.zip on the website

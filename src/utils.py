@@ -69,9 +69,11 @@ def unvec_action(action, legal_act_space):
         Convert array-like action (range [-1,1]) to act
     """
     action = np.array(action).flatten().astype(np.float32)
-    act_dim = action.shape[0] // 2
-    act = {"adjust_gen_p": action[:act_dim] * 0.05,
-           "adjust_gen_v": action[act_dim:] * 0.5 + 0.5}
+    # act_dim = action.shape[0] // 2
+    # act = {"adjust_gen_p": action[:act_dim] * 0.05 , 
+    #        "adjust_gen_v": action[act_dim:] * 0.5 + 0.5}
+    act = {"adjust_gen_p": action * 10,
+           "adjust_gen_v": np.zeros_like(action)}
     act = clip_act(act, legal_act_space)
     return act
 

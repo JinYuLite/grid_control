@@ -1,5 +1,7 @@
 ﻿# -*- coding: UTF-8 -*-
+import os, sys
 import numpy as np
+from shutil import copyfile
 
 from Agent.DoNothingAgent import DoNothingAgent
 from Agent.RandomAgent import RandomAgent
@@ -40,7 +42,7 @@ def run_task(my_agent, max_turn=np.inf):
 
 if __name__ == "__main__":
     
-    path = "../outputs"
+    path = "./Agent"
 
     # do noting agent
     my_agent = DoNothingAgent(settings, path)
@@ -51,12 +53,18 @@ if __name__ == "__main__":
     run_task(my_agent)
 
     # rl agent
-    # sac trial
-    settings["model_name"] = "sac_trial"
+    # # sac trial
+    # copyfile("../selected_models/sac_trial.zip", os.path.join(path, "model.zip"))
+    # my_agent = SACAgent(settings, path)
+    # run_task(my_agent)
+
+    # sac genp_t1
+    copyfile("../selected_models/sac_genp_t1.zip", os.path.join(path, "model.zip"))
     my_agent = SACAgent(settings, path)
     run_task(my_agent)
-    # sac student
-    settings["model_name"] = "sac_student"
+
+    # sac genp_t10 
+    copyfile("../selected_models/sac_genp_t10.zip", os.path.join(path, "model.zip"))
     my_agent = SACAgent(settings, path)
     run_task(my_agent)
 

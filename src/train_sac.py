@@ -13,6 +13,8 @@ from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 
 from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.callbacks import EvalCallback
+
 
 def make_env(save_path, rank=0):
     def _init():
@@ -25,44 +27,39 @@ def make_env(save_path, rank=0):
 
 if __name__ == "__main__":
 
-    save_path = "../outputs"
+    exp_name = "sac_genp_t10"
+    exp_dir = os.path.join("../outputs", exp_name)
+    os.makedirs(exp_dir, exist_ok=True)
 
     # Define env
     # env = Environment(settings, "EPRIReward")
     # env = GridEnv(env)  
-    env = DummyVecEnv([make_env(save_path, rank=0)])
-    # env = VecNormalize(env, norm_obs=True, norm_reward=True)
+    env = DummyVecEnv([make_env(exp_dir, rank=0)])
+    eval_env = DummyVecEnv([make_env(exp_dir, rank=1)])
 
-    # n_actions = env.action_space.shape[-1]
-    # action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
-    # model = TD3("MlpPolicy", 
-    #             env, 
-    #             action_noise=action_noise, 
-    #             verbose=1, 
-    #             learning_rate=0.001,
-    #             buffer_size=5000,
-    #             learning_starts=100,
-    #             batch_size=128,
-    #             policy_delay=5
-    #         )
-
-    policy_kwargs = dict(activation_fn=torch.nn.Tanh) # output: [-1,1]
+    # Create model
+    policy_kwargs = dict(activation_fn=torch.nn.ReLU) # output: [-1,1]
     model = SAC(
         "MlpPolicy",
         env,
         policy_kwargs=policy_kwargs, 
         verbose=1,
         buffer_size=100000,
-        train_freq=50,
+        train_freq=(1, "episode"),
         gamma=0.95,
         batch_size=128,
         learning_rate=0.0005,
         target_update_interval=100,
-        gradient_steps=10
+        gradient_steps=10,
+        ent_coef='auto_0.1',
+        tensorboard_log=exp_dir
     )
 
-    model.learn(total_timesteps=100000, log_interval=10)
-    model.save(os.path.join(save_path, "sac_agent"))
-    # env.save(os.path.join(save_path, "norm_env"))
+    # Start training
+    eval_callback = EvalCallback(eval_env, best_model_save_path=exp_dir,
+                             log_path=exp_dir, eval_freq=1000, n_eval_episodes=10, 
+                             deterministic=True, render=False)
+    model.learn(total_timesteps=100000, log_interval=50, callback=eval_callback)
+    model.save(os.path.join(exp_dir, "sac_agent"))
 
 
