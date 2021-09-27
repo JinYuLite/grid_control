@@ -16,43 +16,54 @@
 - [x] 尝试Imitation Learning
     - 从表格读取第一个时刻的gen_p，作为label
     - gen_v随机生成，作为label
-    - 结果：效果不好只用第一时刻的数据学不出来 等有了模型再尝试 
-
+    - 结果：效果无提升
+    - 原因：只有第一时刻的数据，样本数量、多样性不足
+    
 ### 9.19
 
 - [x] 参加赛道研讨会
 
-- [ ] 使用优化方法计算PowerFlow，和RL策略结合；
-    - 结合方式包括Imitation Learning，Rule-based混合
+- [x] 合理化Action Space
+    - action只训练gen_p, fix gen_v=0
+    - 结果：效果提升非常明显，线上从15 -> 42
+    - gen_p scale扩大10倍
+    - 结果：效果提升非常明显，线上从42 -> 207
 
-    
-- [ ] Play with Observation/Action/Reward Space；
-    - 特征归一化
-    - FrameStack：缓解partially observed的问题
-    - 表示学习：Embedding和Graph Learning
-    - 奖励归一化Scale
-    - 动作噪声/离散化
+### 9.30
+- [ ] 增加规则，避免违反电网规则
+
+- [ ] RL算法优化，包括调参、使用其他算法、并行计算
+
+- [ ] Observation Space优化，包括特征归一化、FrameStack、特征选择、Graph Learning
+
+- [ ] Action Space优化，包括在训练gen_p的模型上微调gen_v
+
+- [ ] Reward Space优化，包括归一化，现在Scale太大
+
+- [ ]环境增加噪声，提高鲁棒性
+
 
 ## 实验结果
-| model_name | 训练结果 | 线上结果 | 
-|------------|---------|---------|
-|  sac_trial |   20.0  | 15.3    |
+| model_name    | 训练结果 | 线上结果 | 
+|---------------|---------|----------|
+|  sac_trial    |  20.0   |  15.3    |
+|  sac_genp_t1  |  207.2  |  42.3    |
+|  sac_genp_t10 |  1613.8 |  206.6   | 
  
+
 ## QAs:
 
 1. 潮流前，潮流后什么意思
-    > PowerFlow计算收敛之前和之后的状态
+A: PowerFlow计算收敛之前和之后的状态
 
 2. grid_loss 是怎么计算的，每一步只有一个值？
-    > 传输线路上的耗损
+A: 传输线路上的耗损
 
 3. 断面
-    > = step
+A: == step
 
 4. forecast reader给了后一时刻的信息
-    > 通过预测下一时刻的信息更好的控制机器，之类直接给出下一时刻的真实负载和新能源发电信息。
+A: 通过预测下一时刻的信息更好的控制机器，之类直接给出下一时刻的真实负载和新能源发电信息
 
 5. legal act space 是怎么计算出来的
-
-6. 如何满足平衡机上下限约束
-
+A: 通过爬坡功率和发电机的最大最小功率一起计算得到
