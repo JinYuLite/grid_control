@@ -49,8 +49,7 @@
 |  sac_genp_t1  |  207.2  |  42.3    |
 |  sac_genp_t10 |  1613.8 |  206.6   | 
 
-> detailed in [qq_doc](【腾讯文档】电网比赛
-https://docs.qq.com/sheet/DYWNnSXJNSlVhS09G) 
+[【腾讯文档】电网比赛实验结果](https://docs.qq.com/sheet/DYWNnSXJNSlVhS09G) 
 
 ## QAs:
 
