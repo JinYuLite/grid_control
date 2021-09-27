@@ -9,7 +9,7 @@
 ### Environment     
 
 * settings
-* forecast_reader: ForecastReader从表格读取`load_p`和`max_renewable_gen_p`，可能是下一时刻的值，为了让问题更简单？
+* forecast_reader: ForecastReader从表格读取`load_p`和`max_renewable_gen_p`，作为对下一时刻的预测值
   * max_renewable_gen_p_all: 106820 * 18
   * load_p_all: 106820 * 91
 * reward_type: 'EPRIReward'
@@ -110,5 +110,5 @@ M: (1) 归一化变量用的是当前时刻的最大值，time dependent (2) 有
 ### 反向量化Action
 #### 9.4版本
      - adjust_gen_p: [-0.05, 0.05] // use tanh to squash, then clip by legal_act_space
-     - adjust_gen_v: [-0.0, 1.0] // use tanh to squash, then clip by legal_act_space
+     - adjust_gen_v: [0.0, 1.0] // use tanh to squash, then clip by legal_act_space
      
