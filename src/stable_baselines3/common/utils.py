@@ -353,7 +353,10 @@ def is_vectorized_observation(observation: np.ndarray, observation_space: gym.sp
     }
 
     try:
-        is_vec_obs_func = is_vec_obs_func_dict[type(observation_space)]
+        if type(observation_space) in is_vec_obs_func_dict:
+            is_vec_obs_func = is_vec_obs_func_dict[type(observation_space)]
+        else:
+            is_vec_obs_func = is_vectorized_box_observation
         return is_vec_obs_func(observation, observation_space)
     except KeyError:
         raise ValueError(
