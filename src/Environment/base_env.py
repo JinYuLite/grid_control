@@ -76,12 +76,6 @@ class Environment:
         action_space = self.action_space_cls.update(grid, self.steps_to_recover_gen, self.steps_to_close_gen,
                                                      rounded_gen_p, nextstep_renewable_gen_p_max)
 
-        # MARK: Create a new grid for next step
-        next_grid = example.Print()
-        next_grid.readdata(row_idx+1, settings.load_p_filepath, settings.load_q_filepath, settings.gen_p_filepath, settings.gen_q_filepath)
-        next_injection_gen_p = self._round_p(next_grid.itime_unp[0])
-        next_grid.env_feedback(settings.name_index, next_injection_gen_p, [], row_idx+1, [])
-
         self.obs = Observation(
             grid=grid, timestep=self.timestep, action_space=action_space,
             steps_to_reconnect_line=self.steps_to_reconnect_line,
@@ -91,7 +85,7 @@ class Environment:
             curstep_renewable_gen_p_max=curstep_renewable_gen_p_max,
             nextstep_renewable_gen_p_max=nextstep_renewable_gen_p_max,
             rounded_gen_p=rounded_gen_p,
-            nextstep_load_p=nextstep_load_p, next_grid=next_grid
+            nextstep_load_p=nextstep_load_p
         )
         return copy.deepcopy(self.obs)
 
@@ -173,7 +167,7 @@ class Environment:
             curstep_renewable_gen_p_max=curstep_renewable_gen_p_max,
             nextstep_renewable_gen_p_max=nextstep_renewable_gen_p_max,
             rounded_gen_p=rounded_gen_p,
-            nextstep_load_p=nextstep_load_p, next_grid=grid
+            nextstep_load_p=nextstep_load_p
         )
 
         self.reward = self.get_reward(self.obs, last_obs)
