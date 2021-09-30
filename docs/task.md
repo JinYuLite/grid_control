@@ -28,11 +28,13 @@
     - 结果：效果提升非常明显，线上从42 -> 207
 
 ### 9.30
-- [ ] 增加规则，避免违反电网规则
+- [ ] 增加规则，避免违反电网规则 / 初始化选择断面
 
 - [ ] RL算法优化，包括调参、使用其他算法、并行计算
+    * FrameStack
+    * 多进程
 
-- [ ] Observation Space优化，包括特征归一化、FrameStack、特征选择、Graph Learning
+- [ ] Observation Space优化，包括特征归一化、特征选择、Graph Learning
 
 - [ ] Action Space优化，包括在训练gen_p的模型上微调gen_v
 
@@ -40,7 +42,6 @@
 
 - [ ] 环境增加噪声，提高鲁棒性
 
-- [ ] 选择从哪个断面开始训练
 
 
 ## 实验结果
