@@ -28,17 +28,18 @@ def make_env(save_path, rank=0):
 if __name__ == "__main__":
 
     # 1. Set parameters
+    num_process = 4
     n_stack = 1
     norm_obs, norm_reward = False, False 
-    exp_name = "td3_genp"
+    exp_name = "ppo_genp_p4"
     exp_dir = os.path.join("../outputs", exp_name)
     os.makedirs(exp_dir, exist_ok=True)
 
     # 2. Define env
     # env = Environment(settings, "EPRIReward")
     # env = GridEnv(env)  
-    env = DummyVecEnv([make_env(exp_dir, rank=0)])
-    eval_env = DummyVecEnv([make_env(exp_dir, rank=1)])
+    env = SubprocVecEnv([make_env(exp_dir, rank=i) for i in range(num_process)])
+    eval_env = SubprocVecEnv([make_env(exp_dir, rank=i+num_process) for i in range(num_process)])
     # - Frame-stacking
     env = VecFrameStack(env, n_stack=n_stack)  
     eval_env = VecFrameStack(eval_env, n_stack=n_stack)  
@@ -47,18 +48,19 @@ if __name__ == "__main__":
     eval_env = VecNormalize(eval_env, norm_obs=norm_obs, norm_reward=norm_reward)
 
     # 3. Create model
-    n_actions = env.action_space.shape[-1]
-    action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=0.01 * np.ones(n_actions))
-    model = TD3("MlpPolicy", 
-                env, 
-                action_noise=action_noise, 
-                verbose=1, 
-                learning_rate=0.001,
-                buffer_size=5000,
-                learning_starts=100,
-                batch_size=128,
-                policy_delay=5,
-                tensorboard_log=exp_dir
+    model = PPO(
+        "MlpPolicy",
+        env,
+        verbose=1,
+        learning_rate=0.0005,
+        batch_size=128,
+        n_steps=100,
+        n_epochs=10,
+        gamma=0.95,
+        vf_coef=0.5,
+        ent_coef='auto_0.1',
+        max_grad_norm=0.5,
+        tensorboard_log=exp_dir
     )
 
     # 4. Start training
