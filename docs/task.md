@@ -28,7 +28,6 @@
     - 结果：效果提升非常明显，线上从42 -> 207
 
 ### 9.30
-- [ ] 增加规则，避免违反电网规则 / 初始化选择断面
 
 - [x] Stable-baselines3 环境优化
     * FrameStack: 和不使用Stack相比没有明显提升
@@ -38,10 +37,17 @@
 - [x] RL算法优化，包括调参、使用其他算法
     * SAC > PPO > TD3
 
-- [ ] Observation Space优化，包括特征归一化、特征选择、Graph Learning
-
 - [x] Action Space优化，包括在训练gen_p的模型上微调gen_v
     * 固定gen_p的策略，只调整gen_v，效果雪崩
+
+### 10.7
+
+- [ ] 增加规则，避免违反电网规则 / 初始化选择断面
+
+
+- [ ] Observation Space优化，包括特征归一化、特征选择、Graph Learning
+    * 使用和paper里一样的状态空间，维度更少
+    * 使用Stable-baselines3提供的动态归一化工具VecNormalize，而不是手动归一化
 
 - [ ] 环境增加噪声，提高鲁棒性
 
