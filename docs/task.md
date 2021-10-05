@@ -30,15 +30,18 @@
 ### 9.30
 - [ ] 增加规则，避免违反电网规则 / 初始化选择断面
 
-- [ ] RL算法优化，包括调参、使用其他算法、并行计算
-    * FrameStack
-    * 多进程
+- [x] Stable-baselines3 环境优化
+    * FrameStack: 和不使用Stack相比没有明显提升
+    * 多进程: 只有PPO可以使用多进程训练，没有比SAC提升
+    * 特征归一化 + 奖励归一化: 没有明显提升，原因待确认 TODO
+
+- [x] RL算法优化，包括调参、使用其他算法
+    * SAC > PPO > TD3
 
 - [ ] Observation Space优化，包括特征归一化、特征选择、Graph Learning
 
-- [ ] Action Space优化，包括在训练gen_p的模型上微调gen_v
-
-- [ ] Reward Space优化，包括归一化，现在Scale太大
+- [x] Action Space优化，包括在训练gen_p的模型上微调gen_v
+    * 固定gen_p的策略，只调整gen_v，效果雪崩
 
 - [ ] 环境增加噪声，提高鲁棒性
 
