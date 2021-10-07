@@ -58,7 +58,7 @@ if __name__ == "__main__":
         n_epochs=10,
         gamma=0.95,
         vf_coef=0.5,
-        ent_coef='auto_0.1',
+        ent_coef=0.1,
         max_grad_norm=0.5,
         tensorboard_log=exp_dir
     )

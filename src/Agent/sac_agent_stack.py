@@ -16,16 +16,26 @@ class Agent():
     def __init__(self, settings, this_directory_path):
         self.settings = settings
         model_path = os.path.join(this_directory_path, "model")
-        self.model = SAC.load(model_path, device="cpu")
+        self.model = SAC.load(model_path)
 
         # Define action space    
         self.action_space = action_space_inst
         # Define observation space    
         self.observation_space = observation_space_inst
 
+        self.num_stack = 4
+        self.stacked_obs = []
+
     def act(self, obs, reward=0.0, done=False):
         # convert class obs to vectorized observation
         observation = self.observation_space.to_gym(obs) 
+        if len(self.stacked_obs) == self.num_stack - 1:
+            self.stacked_obs.pop(0)
+            self.stacked_obs.append(observation)
+        else:
+            self.stacked_obs = [np.zeros_like(observation)] * (self.num_stack-1) + [observation]
+
+        observation = np.stack(self.stacked_obs).flatten()
         # predict
         action, _ = self.model.predict(observation, deterministic=True)
         # convert vectorized action to dict-like act

@@ -53,13 +53,14 @@ if __name__ == "__main__":
                 env, 
                 action_noise=action_noise, 
                 verbose=1, 
-                learning_rate=0.001,
-                buffer_size=5000,
-                learning_starts=100,
-                batch_size=128,
-                policy_delay=5,
                 tensorboard_log=exp_dir
     )
+    #             learning_rate=0.001,
+    #             buffer_size=5000,
+    #             learning_starts=100,
+    #             batch_size=128,
+    #             policy_delay=5,
+    # )
 
     # 4. Start training
     eval_callback = EvalCallback(eval_env, best_model_save_path=exp_dir,

@@ -62,7 +62,7 @@ def run_test():
     mean_reward, std_reward = np.mean(episode_rewards), np.std(episode_rewards)
     mean_ep_length, std_ep_length = np.mean(episode_lengths), np.std(episode_lengths)
 
-    print("=== Test on {} Episodes ===".format(max_episode))
+    print("=== Test {} on {} Episodes ===".format(exp_name, max_episode))
     print("episode_reward: {:.2f} +/- {:.2f}".format(mean_reward,std_reward))
     print("episode_length: {:.2f} +/- {:.2f}".format(mean_ep_length, std_ep_length))
     print("Cost {:.2f} seconds.".format(time.time()-start_time))

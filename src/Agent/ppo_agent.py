@@ -16,7 +16,7 @@ class Agent():
     def __init__(self, settings, this_directory_path):
         self.settings = settings
         model_path = os.path.join(this_directory_path, "model")
-        self.model = SAC.load(model_path, device="cpu")
+        self.model = PPO.load(model_path)
 
         # Define action space    
         self.action_space = action_space_inst

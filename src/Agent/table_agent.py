@@ -1,6 +1,5 @@
 
 import numpy as np
-from utils import unvec_action
 
 class TableAgent():
 
