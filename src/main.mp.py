@@ -18,7 +18,7 @@ from utilize.settings import settings
 from pathos.pools import ProcessPool as Pool
 
 
-max_turn = np.inf 
+max_turn = 288
 
 def run_episode(ep, my_agent):
 
@@ -80,20 +80,20 @@ if __name__ == "__main__":
     my_agent = SACAgent(settings, path)
     run_task(my_agent, max_episode=max_episode, num_workers=num_workers)
 
-    # with reg
-    copyfile("../outputs/sac_genp_reg/best_model.zip", os.path.join(path, "model.zip"))
-    my_agent = SACAgent(settings, path)
-    run_task(my_agent, max_episode=max_episode, num_workers=num_workers)
+    # # with reg
+    # copyfile("../outputs/sac_genp_reg/best_model.zip", os.path.join(path, "model.zip"))
+    # my_agent = SACAgent(settings, path)
+    # run_task(my_agent, max_episode=max_episode, num_workers=num_workers)
 
-    # with noise
-    copyfile("../outputs/sac_genp_noise/best_model.zip", os.path.join(path, "model.zip"))
-    my_agent = SACAgent(settings, path)
-    run_task(my_agent, max_episode=max_episode, num_workers=num_workers)
+    # # with noise
+    # copyfile("../outputs/sac_genp_noise/best_model.zip", os.path.join(path, "model.zip"))
+    # my_agent = SACAgent(settings, path)
+    # run_task(my_agent, max_episode=max_episode, num_workers=num_workers)
 
-    # with normalized reward
-    copyfile("../outputs/sac_genp_nr/best_model.zip", os.path.join(path, "model.zip"))
-    my_agent = SACAgent(settings, path)
-    run_task(my_agent, max_episode=max_episode, num_workers=num_workers)
+    # # with normalized reward
+    # copyfile("../outputs/sac_genp_nr/best_model.zip", os.path.join(path, "model.zip"))
+    # my_agent = SACAgent(settings, path)
+    # run_task(my_agent, max_episode=max_episode, num_workers=num_workers)
 
     # # sac stack
     # copyfile("../outputs/sac_genp_stack4/best_model.zip", os.path.join(path, "model.zip"))

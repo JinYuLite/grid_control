@@ -11,7 +11,9 @@ from Agent.table_agent import TableAgent
 from Environment.base_env import Environment
 from utilize.settings import settings
 
-def run_task(my_agent, max_turn=np.inf):
+max_turn = 288
+
+def run_task(my_agent):
 
     max_episode = 100  # 回合数
 

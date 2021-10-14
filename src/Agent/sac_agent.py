@@ -28,6 +28,11 @@ class Agent():
         observation = self.observation_space.to_gym(obs) 
         # predict
         action, _ = self.model.predict(observation, deterministic=True)
+
+        # special trick
+        if np.mean(np.array(obs.rho)) > 0.35:
+            action *= 0.95
+
         # convert vectorized action to dict-like act
         act = self.action_space.from_gym(action, obs.action_space) 
         return act
